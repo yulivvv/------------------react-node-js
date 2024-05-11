@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const {User, Basket} = require('../models/models')
 
 
+
 const generateJwt = (id, email, role) => {
     return jwt.sign(
         {id, email, role}, 
@@ -26,7 +27,7 @@ class UserController {
             return next(ApiError.badRequest('Пользователь c таким email существует'))
         }
         const hashPassword = await bcrypt.hash(password, 5)
-        const user = await User.create({email, role, password:hashPassword})
+        const user = await User.create({email, role, password: hashPassword})
         const basket = await Basket.create({userId: user.id})
         const token = generateJwt(user.id, user.email, user.role)
         return res.json({token})
